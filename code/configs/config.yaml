@@ -1,0 +1,114 @@
+# Cultural Equilibrium - Configuration File
+# ==========================================
+# Configuration for MOSAIC and baseline models
+
+# General settings
+general:
+  seed: 42
+  num_workers: 4
+  pin_memory: true
+  mixed_precision: true
+
+# MOSAIC (Cultural Equilibrium Alignment Framework)
+mosaic:
+  model_name: "meta-llama/Llama-2-13b-hf"
+  num_cultural_contexts: 12
+  equilibrium_iterations: 500
+  learning_rate: 2.0e-05
+  batch_size: 4
+  gradient_accumulation_steps: 8
+  cultural_alignment_weight: 1.0
+  safety_weight: 0.5
+  bias_penalty_weight: 0.3
+  num_epochs: 3
+  warmup_ratio: 0.1
+  max_seq_length: 512
+
+# DPO (Direct Preference Optimization)
+dpo:
+  model_name: "meta-llama/Llama-2-13b-hf"
+  beta: 0.1
+  learning_rate: 5.0e-07
+  batch_size: 4
+  gradient_accumulation_steps: 8
+  num_epochs: 3
+  warmup_ratio: 0.1
+  max_seq_length: 512
+
+# RLHF (Reinforcement Learning from Human Feedback)
+rlhf:
+  model_name: "meta-llama/Llama-2-13b-hf"
+  sft_learning_rate: 2.0e-05
+  sft_epochs: 3
+  sft_batch_size: 4
+  reward_learning_rate: 1.0e-05
+  reward_epochs: 2
+  reward_batch_size: 8
+  ppo_learning_rate: 1.0e-06
+  ppo_epochs: 2
+  ppo_batch_size: 4
+  ppo_clip_epsilon: 0.2
+  ppo_entropy_coef: 0.01
+  gradient_accumulation_steps: 8
+  max_seq_length: 512
+
+# Cultural Fine-tuning
+cultural_ft:
+  model_name: "meta-llama/Llama-2-13b-hf"
+  num_cultural_adapters: 12
+  adapter_hidden_dim: 256
+  adapter_dropout: 0.1
+  learning_rate: 2.0e-05
+  batch_size: 4
+  gradient_accumulation_steps: 8
+  num_epochs: 3
+  max_seq_length: 512
+
+# Soft Prompt Tuning
+soft_prompt:
+  model_name: "meta-llama/Llama-2-13b-hf"
+  num_cultural_prompts: 12
+  prompt_length: 20
+  prompt_hidden_dim: 4096
+  learning_rate: 0.01
+  batch_size: 8
+  gradient_accumulation_steps: 4
+  num_epochs: 5
+  max_seq_length: 512
+
+# Data configuration
+data:
+  tokenizer_name: "meta-llama/Llama-2-7b-hf"
+  max_seq_length: 512
+  prompt_column: "prompt"
+  chosen_column: "chosen"
+  rejected_column: "rejected"
+  cultural_context_column: "cultural_context"
+  culturepark_path: "data/culturepark"
+  normad_path: "data/normad"
+  normad_max_samples: 5000
+
+# Evaluation configuration
+evaluation:
+  metrics:
+    - cas  # Cultural Appropriateness Score
+    - cbi  # Cultural Bias Index
+    - win_rate  # Pairwise Win Rate
+    - diversity  # Diversity Score
+  batch_size: 8
+  save_results: true
+
+# Logging
+logging:
+  level: "INFO"
+  log_dir: "logs"
+  save_logs: true
+  wandb_enabled: false
+  wandb_project: "cultural-equilibrium"
+
+# Hardware
+hardware:
+  device: "cuda"
+  num_gpus: 4
+  gpu_ids: [0, 1, 2, 3]
+  cpu_offload: false
